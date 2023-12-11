@@ -11,20 +11,20 @@ def do_deploy(archive_path):
         return None
 
     try:
+        tgzfile = archive_path.split("/")[-1]
+        filename = tgzfile.split(".")[0]
+        pathname = "/data/web_static/releases/" + filename
+
         put(archive_path, '/tmp/')
-
-        filename = archive_path.split('/')[-1]
-        release_path = f"/data/web_static/releases/{filename.split('.')[0]}"
-
-        run(f'mkdir -p {release_path}')
-        run(f"tar -xzf /tmp/{filename} -C {release_path}")
-
-        run(f"rm /tmp/{filename}")
-
-        current = '/data/web_static/current'
-        run(f"rm -f {current}")
-
-        run(f"ln -s {release_path} {current}")
+        run(f"mkdir -p /data/web_static/releases/{filename}/")
+        run(f"tar -zxvf /tmp/{tgzfile} -C /data/web_static/releases/{filename}/")
+        run(f"rm /tmp/{tgzfile}")
+        run(f"mv /data/web_static/releases/{filename}/web_static/*\
+            /data/web_static/releases/{filename}/")
+        run(f"rm -rf /data/web_static/releases/{filename}/web_static")
+        run("rm -rf /data/web_static/current")
+        run(
+            f"ln -s /data/web_static/releases/{filename}/ /data/web_static/current")
 
         return True
 
