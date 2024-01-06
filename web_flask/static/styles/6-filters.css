@@ -58,7 +58,9 @@ ul {
 	padding-bottom: 20px;
 }
 
-li {}
+li {
+	margin: 12px auto 12px 30px;
+}
 
 h2 {
 	font-size: 16px;
